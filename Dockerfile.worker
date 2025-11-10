@@ -14,8 +14,8 @@ RUN pip install --no-cache-dir pipenv
 # Copy dependency files
 COPY Pipfile* ./
 
-# Install Python dependencies (this will generate Pipfile.lock if missing)
-RUN pipenv install --system
+# Generate Pipfile.lock if missing and install dependencies
+RUN pipenv lock && pipenv install --system
 
 # Copy application code
 COPY . .
