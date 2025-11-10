@@ -12,9 +12,9 @@ RUN apt-get update && apt-get install -y \
 RUN pip install --no-cache-dir pipenv
 
 # Copy dependency files
-COPY Pipfile Pipfile.lock ./
+COPY Pipfile* ./
 
-# Install Python dependencies
+# Install Python dependencies (this will generate Pipfile.lock if missing)
 RUN pipenv install --system
 
 # Copy application code
