@@ -8,7 +8,8 @@ export function useAlerts(maxItems = 10) {
   const [alerts, setAlerts] = useState<AlertEvent[]>([]);
 
   useEffect(() => {
-    const apiBase = process.env.NEXT_PUBLIC_API_BASE ?? 'http://localhost:8080';
+    // Hardcoded for Railway deployment - environment variable not being picked up during build
+    const apiBase = 'https://reddit-production-e3de.up.railway.app';
     const source = new EventSource(`${apiBase}/v1/alerts/live`);
     source.onmessage = (event) => {
       const data = JSON.parse(event.data) as AlertEvent;

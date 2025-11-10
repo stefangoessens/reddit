@@ -11,7 +11,8 @@ const fetcher = (url: string) =>
   });
 
 export function useTrending(window = '5m') {
-  const apiBase = process.env.NEXT_PUBLIC_API_BASE ?? 'http://localhost:8080';
+  // Hardcoded for Railway deployment - environment variable not being picked up during build
+  const apiBase = 'https://reddit-production-e3de.up.railway.app';
   const { data, error, isLoading } = useSWR<TrendingTicker[]>(
     `${apiBase}/v1/trending?window=${window}`,
     fetcher,
