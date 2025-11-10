@@ -1,23 +1,23 @@
 export type TrendingTicker = {
   ticker: string;
   mentions: number;
-  uniqueAuthors: number;
+  unique_authors: number;
   zscore: number;
-  avgSentiment: number;
-  hypeScore: number;
-  firstSeen: string;
+  avg_sentiment: number;
+  hype_score: number;
+  first_seen: string;
   window?: string;
-  lastPrice?: number;
+  last_price?: number;
 };
 
 export type AlertEvent = {
   ts: string;
   ticker: string;
   tier: 'heads-up' | 'actionable';
-  hypeScore: number;
+  hype_score: number;
   zscore: number;
-  uniqueAuthors: number;
-  threadsTouched: number;
-  avgSentiment: number;
-  priceAtAlert?: number;
+  unique_authors: number;
+  threads_touched: number;
+  avg_sentiment: number;
+  price_at_alert?: number;
 };

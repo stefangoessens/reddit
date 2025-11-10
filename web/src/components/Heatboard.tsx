@@ -34,11 +34,11 @@ export function Heatboard({ data }: HeatboardProps) {
             </div>
             <div>
               <dt className="text-slate-500">Authors</dt>
-              <dd className="text-lg font-semibold">{ticker.uniqueAuthors}</dd>
+              <dd className="text-lg font-semibold">{ticker.unique_authors}</dd>
             </div>
             <div>
               <dt className="text-slate-500">Hype</dt>
-              <dd className="text-lg font-semibold">{ticker.hypeScore.toFixed(1)}</dd>
+              <dd className="text-lg font-semibold">{ticker.hype_score.toFixed(1)}</dd>
             </div>
             <div>
               <dt className="text-slate-500">First seen</dt>
@@ -46,12 +46,12 @@ export function Heatboard({ data }: HeatboardProps) {
                 {new Intl.DateTimeFormat('en', {
                   hour: '2-digit',
                   minute: '2-digit',
-                }).format(new Date(ticker.firstSeen))}
+                }).format(new Date(ticker.first_seen))}
               </dd>
             </div>
           </dl>
           <div className="mt-4">
-            <SentimentBadge avgSentiment={ticker.avgSentiment} />
+            <SentimentBadge avgSentiment={ticker.avg_sentiment} />
           </div>
         </article>
       ))}
