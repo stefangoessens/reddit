@@ -63,11 +63,11 @@ class AppSettings(BaseSettings):
     """Top-level settings aggregator for dependency injection."""
 
     env: str = Field(default="development", validation_alias="APP_ENV")
-    kafka: KafkaSettings
-    postgres: PostgresSettings
-    reddit: RedditSettings
-    price_feed: PriceFeedSettings
-    api: ApiSettings
+    kafka: KafkaSettings | None = None
+    postgres: PostgresSettings | None = None
+    reddit: RedditSettings | None = None
+    price_feed: PriceFeedSettings | None = None
+    api: ApiSettings = Field(default_factory=ApiSettings)
 
     model_config = {
         "env_nested_delimiter": "__",

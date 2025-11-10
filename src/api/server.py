@@ -15,23 +15,29 @@ from common.db import PostgresClient
 
 
 @lru_cache
-def get_db() -> PostgresClient:
+def get_db() -> PostgresClient | None:
     settings = get_settings()
+    if settings.postgres is None:
+        return None
     return PostgresClient(dsn=str(settings.postgres.dsn))
 
 
-def get_trend_service(db: PostgresClient = Depends(get_db)) -> TrendService:
+def get_trend_service(db: PostgresClient | None = Depends(get_db)) -> TrendService | None:
+    if db is None:
+        return None
     return TrendService(db)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     db = get_db()
-    await db.connect()
+    if db is not None:
+        await db.connect()
     try:
         yield
     finally:
-        await db.close()
+        if db is not None:
+            await db.close()
 
 
 app = FastAPI(title="WSB Hype Radar", docs_url=None, redoc_url=None, lifespan=lifespan)
@@ -46,8 +52,10 @@ async def healthcheck() -> dict[str, str]:
 async def trending(
     window: str = Query(default="5m"),
     limit: int = Query(default=10, le=100),
-    svc: TrendService = Depends(get_trend_service),
+    svc: TrendService | None = Depends(get_trend_service),
 ) -> list[dict]:
+    if svc is None:
+        return []
     return await svc.top_trending(window=window, limit=limit)
 
 
