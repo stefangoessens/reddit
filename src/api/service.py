@@ -12,6 +12,10 @@ _WINDOW_DEFAULTS = {
     "15m": timedelta(minutes=15),
     "1h": timedelta(hours=1),
     "6h": timedelta(hours=6),
+    "24h": timedelta(hours=24),
+    "1d": timedelta(days=1),
+    "7d": timedelta(days=7),
+    "30d": timedelta(days=30),
 }
 
 
@@ -60,6 +64,8 @@ class TrendService:
             return timedelta(minutes=int(window[:-1]))
         if window.endswith("h") and window[:-1].isdigit():
             return timedelta(hours=int(window[:-1]))
+        if window.endswith("d") and window[:-1].isdigit():
+            return timedelta(days=int(window[:-1]))
         return _WINDOW_DEFAULTS["5m"]
 
     def _format_row(self, row: Mapping[str, Any], window: str) -> Dict[str, Any]:

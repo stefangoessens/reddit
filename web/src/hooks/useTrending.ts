@@ -10,11 +10,11 @@ const fetcher = (url: string) =>
     return res.json();
   });
 
-export function useTrending(window = '5m') {
+export function useTrending(window = '5m', limit = 20) {
   // Hardcoded for Railway deployment - environment variable not being picked up during build
   const apiBase = 'https://reddit-production-e3de.up.railway.app';
   const { data, error, isLoading } = useSWR<TrendingTicker[]>(
-    `${apiBase}/v1/trending?window=${window}`,
+    `${apiBase}/v1/trending?window=${window}&limit=${limit}`,
     fetcher,
     { refreshInterval: 30_000 },
   );

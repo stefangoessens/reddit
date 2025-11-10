@@ -61,7 +61,7 @@ async def healthcheck() -> dict[str, str]:
 @app.get("/v1/trending")
 async def trending(
     window: str = Query(default="5m"),
-    limit: int = Query(default=10, le=100),
+    limit: int = Query(default=20, le=100),
     svc: TrendService | None = Depends(get_trend_service),
 ) -> list[dict]:
     if svc is None:
