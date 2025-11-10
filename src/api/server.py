@@ -6,6 +6,7 @@ from functools import lru_cache
 from typing import AsyncIterator
 
 from fastapi import Depends, FastAPI, Query
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
 from api.service import TrendService
@@ -41,6 +42,15 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
 
 app = FastAPI(title="WSB Hype Radar", docs_url=None, redoc_url=None, lifespan=lifespan)
+
+# Configure CORS to allow web app to access API
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow all origins in development
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/healthz")
