@@ -1,7 +1,7 @@
 'use client';
 
 import { AlertsFeed } from '@/components/AlertsFeed';
-import { Heatboard } from '@/components/Heatboard';
+import { TrendingTable } from '@/components/TrendingTable';
 import { useTrending } from '@/hooks/useTrending';
 
 export default function HomePage() {
@@ -19,7 +19,7 @@ export default function HomePage() {
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          <Heatboard data={tickers} />
+          <TrendingTable data={tickers} />
         </div>
         <div className="space-y-3">
           <h2 className="text-xl font-semibold">Live Alerts</h2>
