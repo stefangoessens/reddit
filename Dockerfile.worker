@@ -5,6 +5,7 @@ WORKDIR /app
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     gcc \
+    bash \
     && rm -rf /var/lib/apt/lists/*
 
 # Install pipenv
@@ -25,5 +26,7 @@ ENV PYTHONPATH=/app/src
 # Make start scripts executable
 RUN chmod +x start-*.sh
 
-# Default command (will be overridden by service-specific settings)
+# Use ENTRYPOINT to prevent overrides from Railway's auto-detection
+# The start command should be set via environment variable per service
+ENTRYPOINT ["/bin/bash", "-c"]
 CMD ["./start-ingestor.sh"]
