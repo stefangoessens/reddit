@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  lint-test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: wsb
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pipenv
+        run: python -m pip install pipenv
+      - name: Install dependencies
+        run: pipenv install --dev
+        env:
+          PIPENV_HIDE_EMOJIS: "1"
+      - name: Run migrations
+        env:
+          APP_ENV: ci
+          POSTGRES__DSN: postgresql+asyncpg://postgres:postgres@localhost:5432/wsb
+        run: pipenv run alembic -c alembic.ini upgrade head
+      - name: Run tests
+        env:
+          POSTGRES__DSN: postgresql+asyncpg://postgres:postgres@localhost:5432/wsb
+        run: pipenv run pytest
+      - name: Check migrations status
+        env:
+          POSTGRES__DSN: postgresql+asyncpg://postgres:postgres@localhost:5432/wsb
+        run: pipenv run alembic -c alembic.ini current
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+          cache-dependency-path: web/pnpm-lock.yaml
+      - name: Install web deps
+        working-directory: web
+        run: pnpm install --frozen-lockfile
+      - name: Web lint
+        working-directory: web
+        run: pnpm lint
+      - name: Web tests
+        working-directory: web
+        run: pnpm test -- run
