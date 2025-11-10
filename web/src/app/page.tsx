@@ -1,3 +1,5 @@
+'use client';
+
 import { AlertsFeed } from '@/components/AlertsFeed';
 import { Heatboard } from '@/components/Heatboard';
 import { useTrending } from '@/hooks/useTrending';
