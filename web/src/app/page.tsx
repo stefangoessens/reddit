@@ -5,7 +5,7 @@ import { Heatboard } from '@/components/Heatboard';
 import { useTrending } from '@/hooks/useTrending';
 
 export default function HomePage() {
-  const { tickers, isLoading, isError } = useTrending();
+  const { tickers, isLoading, isError } = useTrending('1h');
   return (
     <section className="space-y-6">
       <div>
