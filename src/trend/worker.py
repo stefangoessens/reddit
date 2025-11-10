@@ -45,10 +45,14 @@ async def run_alert_worker(poll_seconds: int = 30) -> None:
     await db.connect()
     repo = PostgresAlertRepository(db)
     engine = TrendEngine()
-    from price.client import PolygonClient
-    from price.service import MinuteBarRepository, PriceService
 
-    price_service = PriceService(PolygonClient(settings.price_feed), MinuteBarRepository(db))
+    # Optional price service (only if price_feed config is provided)
+    price_service = None
+    if settings.price_feed is not None:
+        from price.client import PolygonClient
+        from price.service import MinuteBarRepository, PriceService
+        price_service = PriceService(PolygonClient(settings.price_feed), MinuteBarRepository(db))
+
     service = AlertService(engine, repo, price_service=price_service, alert_broadcaster=broadcaster)
     since = datetime.now(timezone.utc) - timedelta(minutes=15)
     try:
