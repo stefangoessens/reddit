@@ -3,14 +3,13 @@
 import { useEffect, useState } from 'react';
 
 import type { AlertEvent } from '@/lib/types';
+import { API_BASE } from '@/lib/env';
 
 export function useAlerts(maxItems = 10) {
   const [alerts, setAlerts] = useState<AlertEvent[]>([]);
 
   useEffect(() => {
-    // Hardcoded for Railway deployment - environment variable not being picked up during build
-    const apiBase = 'https://reddit-production-e3de.up.railway.app';
-    const source = new EventSource(`${apiBase}/v1/alerts/live`);
+    const source = new EventSource(`${API_BASE}/v1/alerts/live`);
     source.onmessage = (event) => {
       const data = JSON.parse(event.data) as AlertEvent;
       setAlerts((prev) => [data, ...prev].slice(0, maxItems));

@@ -3,6 +3,9 @@
 import useSWR from 'swr';
 
 import type { TrendingTicker } from '@/lib/types';
+import { API_BASE } from '@/lib/env';
+
+export type TrendingWindow = '5m' | '1h' | '24h' | '7d' | '30d';
 
 const fetcher = (url: string) =>
   fetch(url).then((res) => {
@@ -10,11 +13,9 @@ const fetcher = (url: string) =>
     return res.json();
   });
 
-export function useTrending(window = '5m', limit = 20) {
-  // Hardcoded for Railway deployment - environment variable not being picked up during build
-  const apiBase = 'https://reddit-production-e3de.up.railway.app';
+export function useTrending(window: TrendingWindow = '5m', limit = 20) {
   const { data, error, isLoading } = useSWR<TrendingTicker[]>(
-    `${apiBase}/v1/trending?window=${window}&limit=${limit}`,
+    `${API_BASE}/v1/trending?window=${window}&limit=${limit}`,
     fetcher,
     { refreshInterval: 30_000 },
   );

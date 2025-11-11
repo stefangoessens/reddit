@@ -53,6 +53,23 @@ tests/              # Python unit/integration suites + fixtures
    pyenv exec pipenv run python -m trend.worker
    ```
 
+## AI SDK Copilot (`web/src/app/ai`)
+
+- Copy `web/.env.example` to `web/.env.local` and set `OPENAI_API_KEY` with an OpenAI key that has access to `gpt-4o-mini`.
+- From `web/`, run `pnpm dev` and open `http://localhost:3000/ai` to load the chat playground.
+- The page uses the [AI SDK getting-started guide](https://ai-sdk.dev/docs/getting-started) verbatim: `useChat` from `@ai-sdk/react` on the client and a streaming `/api/chat` route on the server powered by `streamText` + OpenAI.
+- Every question automatically includes the trending table (selected timeframe) plus the latest alert tape so the assistant reasons over the same data visible on the homepage.
+- Responses stream token-by-token, so you can stop midway or keep iterating as you explore WallStreetBets hype data.
+
+## Dashboard Notes
+
+- The Now board supports 5m/1h/24h/7d/30d windows; switch using the chips above the table.
+- Use the **Save record** button to persist the current leaderboard locally (handy when mention counts fall and you want a receipt). Records live in `localStorage` and you can clear or remove them individually from the sidebar panel.
+- Heatboard cards (top 6 tickers) and the sortable table both pull from `/v1/trending` so they stay in sync with the API data described in `docs/SPEC.md`.
+- `/alerts` streams the full alert tape, supports tier filtering, and surfaces actionable rates in real time.
+- `/ticker/[sym]` pulls minute-level mentions plus impact stats so you can inspect hype vs. returns per ticker.
+- `/leaders` calls `/v1/posters/leaderboard` for alpha/win-rate tables; swap metrics with the chips.
+
 ## Next Steps
 
 - Flesh out the ingestion/NLP/trend services per `docs/SPEC.md`.
