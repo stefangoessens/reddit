@@ -15,7 +15,9 @@ RUN pip install --no-cache-dir pipenv
 COPY Pipfile* ./
 
 # Generate Pipfile.lock if missing and install dependencies
-RUN pipenv lock && pipenv install --system
+# Use --deploy to ensure lock file is used, or lock first if it doesn't exist
+RUN if [ ! -f Pipfile.lock ]; then pipenv lock; fi && \
+    pipenv install --deploy --system
 
 # Copy application code
 COPY . .
