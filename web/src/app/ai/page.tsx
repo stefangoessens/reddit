@@ -12,7 +12,7 @@ type Timeframe = (typeof TIMEFRAMES)[number];
 const CONTEXT_TICKER_LIMIT = 15;
 
 export default function AiPlaygroundPage() {
-  const { messages, sendMessage, status, stop, error } = useChat({ api: '/api/chat' });
+  const { messages, sendMessage, status, stop, error } = useChat();
   const [input, setInput] = useState('');
   const [analysisWindow, setAnalysisWindow] = useState<Timeframe>('1h');
   const { tickers, isLoading: isTrendingLoading } = useTrending(analysisWindow, CONTEXT_TICKER_LIMIT);
